@@ -1,0 +1,27 @@
+Service:
+  Name: SystemService
+  Host: 127.0.0.1:8003
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+Database:
+  Source: mysql
+  User: root
+  Password: 1234
+  Host: 127.0.0.1:3306
+  DbName: grpc_admin
+  Charset: utf8mb4
+  ParseTime: true
+  Loc: Local
+  MaxIdleConns: 10
+  MaxOpenConns: 100
+Cache:
+  Redis:
+    Host: 127.0.0.1:6379
+    Password: 1234
+    DB: 0
+Logger:
+  Zap:
+    OutputDir: app/system/internal/log
+    Format:    console
+    Level:     debug

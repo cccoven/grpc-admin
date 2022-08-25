@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "app/system/system";
+
+package pb;
+
+service ThirdParty {
+  rpc SendSMS(SendSMSRequest) returns (Empty) {};
+}
+
+message Empty {}
+
+message SendSMSRequest {
+  string phone = 1;
+  string content = 2;
+}

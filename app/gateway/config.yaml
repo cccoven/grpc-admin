@@ -1,0 +1,29 @@
+Server:
+  Port: 8000
+Jwt:
+  SigningKey: 8359390b-1890-405f-bde1-94aa5e36f3cf
+  Issuer: coven
+  ExpiresTime: 604800
+  BufferTime: 86400
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+Logger:
+  Zap:
+    OutputDir: app/gateway/log
+    Format: console
+    Level: debug
+Cache:
+  Redis:
+    Host: 127.0.0.1:6379
+    Password: 1234
+    DB: 0
+UserRpc:
+  Name: UserService
+  LoadBalanceMode: round_robin
+ThirdPartyRpc:
+  Name: ThirdPartyService
+  LoadBalanceMode: round_robin
+SystemRpc:
+  Name: SystemService
+  LoadBalanceMode: round_robin

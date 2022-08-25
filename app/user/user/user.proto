@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+option go_package = "app/user/user";
+
+package pb;
+
+service User {
+  // 后台管理登录
+  rpc AdminLogin(AdminLoginRequest) returns (UserSchema) {}
+
+  // 创建/更新用户
+  rpc ModifyUser(UserSchema) returns (UserSchema) {}
+  // 用户详情
+  rpc GetUser(UserSchema) returns (UserSchema) {}
+  // 删除用户
+  rpc DeleteUser(UserSchema) returns (UserProtoEmpty) {}
+  // 用户列表
+  rpc ListUser(ListUserRequest) returns (ListUserReply) {}
+
+  // 创建/更新角色
+  rpc ModifyRole(RoleSchema) returns (RoleSchema) {}
+  // 删除角色
+  rpc DeleteRole(RoleSchema) returns (UserProtoEmpty) {}
+  // 角色授权
+  rpc AuthorizeRole(AuthorizeRoleRequest) returns (UserProtoEmpty) {}
+  // 角色设置菜单
+  rpc SetRoleMenus(SetRoleMenusRequest) returns (UserProtoEmpty) {}
+  // 给用户赋予角色
+  rpc AssignRoles(AssignRolesRequest) returns (UserProtoEmpty) {}
+  // 检查角色权限
+  rpc CheckRolesAuthority(CheckRolesAuthorityRequest) returns (CheckRolesAuthorityReply) {}
+  // 角色列表
+  rpc ListRole(ListRoleRequest) returns (ListRoleReply) {}
+}
+
+message UserProtoEmpty {}
+
+message UserSchema {
+  uint32 ID = 1;
+  int64 createdAt = 2;
+  int64 updatedAt = 3;
+  string username = 4;
+  int32 gender = 5;
+  string avatar = 6;
+  string phone = 7;
+  repeated RoleSchema roles = 8;
+}
+
+message RoleSchema {
+  uint32 ID = 1;
+  int64 createdAt = 2;
+  int64 updatedAt = 3;
+  string name = 4;
+  string desc = 5;
+  uint32 parentID = 6;
+  int32 isDefault = 7;
+  repeated RoleSchema children = 8;
+}
+
+message ListRoleRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  RoleSchema role = 3;
+}
+
+message ListRoleReply {
+  repeated RoleSchema list = 1;
+  int64 total = 2;
+}
+
+message ListUserRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  UserSchema user = 3;
+}
+
+message ListUserReply {
+  repeated UserSchema list = 1;
+  int64 total = 2;
+}
+
+message CheckRolesAuthorityRequest {
+  repeated uint32 roleIDs = 1;
+  Authority authority = 2;
+}
+message CheckRolesAuthorityReply {
+  bool ok = 1;
+}
+
+message AssignRolesRequest {
+  uint32 userID = 1;
+  repeated uint32 roles = 2;
+}
+
+message Authority {
+  string path = 1;
+  string method = 2;
+}
+message AuthorizeRoleRequest {
+  uint32 roleID = 1;
+  repeated Authority authorities = 2;
+}
+
+message SetRoleMenusRequest {
+  uint32 roleID = 1;
+  repeated uint32 menus = 2;
+}
+
+message AdminLoginRequest {
+  string account = 1; // 账号
+  int32 accountType = 2; // 账号类型
+  string password = 3;
+  string ip = 4; // 用户 ip
+  string agent = 5; // 登录的设备
+}
+
+message FindUserRequest {
+  uint32 ID = 1;
+  string username = 2;
+  string phone = 3;
+}

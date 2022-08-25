@@ -1,0 +1,98 @@
+syntax = 'proto3';
+
+option go_package = "app/system/system";
+
+package pb;
+
+service System {
+  // 创建/更新路由组
+  rpc ModifyRouteGroup(RouteGroupSchema) returns (RouteGroupSchema) {}
+  // 路由组详情
+  rpc GetRouteGroup(RouteGroupSchema) returns (RouteGroupSchema) {}
+  // 删除路由组
+  rpc DeleteRouteGroup(MultipleID) returns (SystemProtoEmpty) {}
+  // 路由组列表
+  rpc ListRouteGroup(ListRouteGroupRequest) returns (ListRouteGroupReply) {}
+  // 创建/更新路由
+  rpc ModifyRoute(RouteSchema) returns (RouteSchema) {}
+  // 路由详情
+  rpc GetRoute(RouteSchema) returns (RouteSchema) {}
+  // 删除路由
+  rpc DeleteRoute(MultipleID) returns (SystemProtoEmpty) {}
+  // 路由列表
+  rpc ListRoute(ListRouteRequest) returns (ListRouteReply) {}
+  // 创建/更新菜单
+  rpc ModifyMenu(MenuSchema) returns (MenuSchema) {}
+  // 菜单详情
+  rpc GetMenu(MenuSchema) returns (MenuSchema) {}
+  // 删除菜单
+  rpc DeleteMenu(MultipleID) returns (SystemProtoEmpty) {}
+  // 菜单列表
+  rpc ListMenu(ListMenuRequest) returns (ListMenuReply) {}
+}
+
+message SystemProtoEmpty {}
+
+message MenuSchema {
+  uint32 ID = 1;
+  int64 createdAt = 2;
+  int64 updatedAt = 3;
+  string path = 4;
+  string name = 5;
+  string component = 6;
+  int32 sort = 7;
+  uint32 parentID = 8;
+  repeated MenuSchema children = 9;
+}
+
+message RouteGroupSchema {
+  uint32 ID = 1;
+  int64 createdAt = 2;
+  int64 updatedAt = 3;
+  string name = 4;
+}
+
+message RouteSchema {
+  uint32 ID = 1;
+  int64 createdAt = 2;
+  int64 updatedAt = 3;
+  string path = 4;
+  string method = 5;
+  string desc = 6;
+  uint32 groupID = 7;
+  RouteGroupSchema group = 8;
+}
+
+message MultipleID {
+  repeated uint32 IDs = 1;
+}
+
+message ListMenuRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  MenuSchema menu = 3;
+}
+message ListMenuReply {
+  repeated MenuSchema list = 1;
+  int64 total = 2;
+}
+
+message ListRouteGroupRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  RouteGroupSchema routeGroup = 3;
+}
+message ListRouteGroupReply {
+  repeated RouteGroupSchema list = 1;
+  int64 total = 2;
+}
+
+message ListRouteRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  RouteSchema route = 3;
+}
+message ListRouteReply {
+  repeated RouteSchema list = 1;
+  int64 total = 2;
+}
