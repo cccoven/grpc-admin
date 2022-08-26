@@ -166,7 +166,7 @@ func (s *SystemApi) CreateRoute(c *gin.Context) {
 		Method:    schema.Method,
 		Desc:      schema.Desc,
 		GroupID:   schema.GroupID,
-		Group: response.RouteGroup{
+		Group: &response.RouteGroup{
 			ID:        schema.Group.ID,
 			CreatedAt: time.UnixMilli(schema.Group.CreatedAt).Format("2006-01-02 15:04:05"),
 			UpdatedAt: time.UnixMilli(schema.Group.UpdatedAt).Format("2006-01-02 15:04:05"),
@@ -203,7 +203,7 @@ func (s *SystemApi) UpdateRoute(c *gin.Context) {
 		Method:    schema.Method,
 		Desc:      schema.Desc,
 		GroupID:   schema.GroupID,
-		Group: response.RouteGroup{
+		Group: &response.RouteGroup{
 			ID:        schema.Group.ID,
 			CreatedAt: time.UnixMilli(schema.Group.CreatedAt).Format("2006-01-02 15:04:05"),
 			UpdatedAt: time.UnixMilli(schema.Group.UpdatedAt).Format("2006-01-02 15:04:05"),
@@ -229,7 +229,7 @@ func (s *SystemApi) GetRoute(c *gin.Context) {
 		Method:    schema.Method,
 		Desc:      schema.Desc,
 		GroupID:   schema.GroupID,
-		Group: response.RouteGroup{
+		Group: &response.RouteGroup{
 			ID:        schema.Group.ID,
 			CreatedAt: time.UnixMilli(schema.Group.CreatedAt).Format("2006-01-02 15:04:05"),
 			UpdatedAt: time.UnixMilli(schema.Group.UpdatedAt).Format("2006-01-02 15:04:05"),
@@ -283,7 +283,7 @@ func (s *SystemApi) ListRoute(c *gin.Context) {
 			Method:    schema.Method,
 			Desc:      schema.Desc,
 			GroupID:   schema.GroupID,
-			Group: response.RouteGroup{
+			Group: &response.RouteGroup{
 				ID:        schema.Group.ID,
 				CreatedAt: time.UnixMilli(schema.Group.CreatedAt).Format("2006-01-02 15:04:05"),
 				UpdatedAt: time.UnixMilli(schema.Group.UpdatedAt).Format("2006-01-02 15:04:05"),

@@ -36,6 +36,8 @@ type IUserRepo interface {
 	FindRolesByID(roleIDs []uint32) ([]model.Role, error)
 	FindRole(cond model.Role, withUsers bool) (*model.Role, error)
 	SetRoleMenus(role *model.Role, menuIDs []uint32) error
+	GetRoutesByRoleID(roleID uint32) ([]model.Route, error)
+	GetMenusByRoleID(roleID uint32) ([]model.Menu, error)
 }
 
 type UserRepo struct {
@@ -45,6 +47,44 @@ type UserRepo struct {
 
 	// casbin
 	casbinEnforcer *casbin.SyncedEnforcer
+}
+
+// GetMenusByRoleID 根据角色 ID 获取菜单
+func (u *UserRepo) GetMenusByRoleID(roleID uint32) ([]model.Menu, error) {
+	var menus []model.Menu
+	role, err := u.FindRole(model.Role{GormModel: pkg.GormModel{ID: uint(roleID)}}, false)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = u.db.Model(&role).Association("Menus").Find(&menus); err != nil {
+		return nil, errorx.Default()
+	}
+
+	return menus, nil
+}
+
+// GetRoutesByRoleID 根据角色 ID 获取路由
+func (u *UserRepo) GetRoutesByRoleID(roleID uint32) ([]model.Route, error) {
+	var routes []model.Route
+	_, err := u.FindRole(model.Role{GormModel: pkg.GormModel{ID: uint(roleID)}}, false)
+	if err != nil {
+		return nil, err
+	}
+
+	// 从 casbin 表中找出该角色的路由权限
+	filteredPolicy := u.casbinEnforcer.GetFilteredPolicy(0, strconv.Itoa(int(roleID)))
+
+	builder := u.db.Model(&[]model.Route{})
+	for _, policy := range filteredPolicy {
+		path, method := policy[1], policy[2]
+		builder = builder.Or("`path` = ? AND `method` = ?", path, method)
+	}
+	if err := builder.Find(&routes).Error; err != nil {
+		return nil, errorx.Default()
+	}
+
+	return routes, nil
 }
 
 // SetRoleMenus 角色分配菜单

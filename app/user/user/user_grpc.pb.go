@@ -46,6 +46,10 @@ type UserClient interface {
 	CheckRolesAuthority(ctx context.Context, in *CheckRolesAuthorityRequest, opts ...grpc.CallOption) (*CheckRolesAuthorityReply, error)
 	// 角色列表
 	ListRole(ctx context.Context, in *ListRoleRequest, opts ...grpc.CallOption) (*ListRoleReply, error)
+	// 获取角色权限
+	RoleAuthorities(ctx context.Context, in *RoleSchema, opts ...grpc.CallOption) (*RoleAuthoritiesReply, error)
+	// 获取角色菜单
+	RoleMenus(ctx context.Context, in *RoleSchema, opts ...grpc.CallOption) (*RoleMenusReply, error)
 }
 
 type userClient struct {
@@ -164,6 +168,24 @@ func (c *userClient) ListRole(ctx context.Context, in *ListRoleRequest, opts ...
 	return out, nil
 }
 
+func (c *userClient) RoleAuthorities(ctx context.Context, in *RoleSchema, opts ...grpc.CallOption) (*RoleAuthoritiesReply, error) {
+	out := new(RoleAuthoritiesReply)
+	err := c.cc.Invoke(ctx, "/pb.User/RoleAuthorities", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) RoleMenus(ctx context.Context, in *RoleSchema, opts ...grpc.CallOption) (*RoleMenusReply, error) {
+	out := new(RoleMenusReply)
+	err := c.cc.Invoke(ctx, "/pb.User/RoleMenus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -192,6 +214,10 @@ type UserServer interface {
 	CheckRolesAuthority(context.Context, *CheckRolesAuthorityRequest) (*CheckRolesAuthorityReply, error)
 	// 角色列表
 	ListRole(context.Context, *ListRoleRequest) (*ListRoleReply, error)
+	// 获取角色权限
+	RoleAuthorities(context.Context, *RoleSchema) (*RoleAuthoritiesReply, error)
+	// 获取角色菜单
+	RoleMenus(context.Context, *RoleSchema) (*RoleMenusReply, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -234,6 +260,12 @@ func (UnimplementedUserServer) CheckRolesAuthority(context.Context, *CheckRolesA
 }
 func (UnimplementedUserServer) ListRole(context.Context, *ListRoleRequest) (*ListRoleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRole not implemented")
+}
+func (UnimplementedUserServer) RoleAuthorities(context.Context, *RoleSchema) (*RoleAuthoritiesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RoleAuthorities not implemented")
+}
+func (UnimplementedUserServer) RoleMenus(context.Context, *RoleSchema) (*RoleMenusReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RoleMenus not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -464,6 +496,42 @@ func _User_ListRole_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_RoleAuthorities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoleSchema)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).RoleAuthorities(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.User/RoleAuthorities",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).RoleAuthorities(ctx, req.(*RoleSchema))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_RoleMenus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoleSchema)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).RoleMenus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.User/RoleMenus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).RoleMenus(ctx, req.(*RoleSchema))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -518,6 +586,14 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListRole",
 			Handler:    _User_ListRole_Handler,
+		},
+		{
+			MethodName: "RoleAuthorities",
+			Handler:    _User_RoleAuthorities_Handler,
+		},
+		{
+			MethodName: "RoleMenus",
+			Handler:    _User_RoleMenus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

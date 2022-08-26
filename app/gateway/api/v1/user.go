@@ -380,6 +380,40 @@ func (u *UserApi) SetRoleMenus(c *gin.Context) {
 	response.Success(c, nil)
 }
 
+// GetRoleAuthorities 获取角色权限
+func (u *UserApi) GetRoleAuthorities(c *gin.Context) {
+	paramID := c.Param("id")
+	roleID, _ := strconv.Atoi(paramID)
+
+	reply, err := u.userRpc.RoleAuthorities(context.Background(), &user.RoleSchema{ID: uint32(roleID)})
+	if err != nil {
+		response.RpcError(c, err)
+		return
+	}
+
+	resp := make([]response.Route, len(reply.Authorities))
+	_ = util.CopyWithTimeConverter(&resp, reply.Authorities)
+
+	response.Success(c, resp)
+}
+
+// GetRoleMenus 获取角色菜单
+func (u *UserApi) GetRoleMenus(c *gin.Context) {
+	paramID := c.Param("id")
+	roleID, _ := strconv.Atoi(paramID)
+
+	reply, err := u.userRpc.RoleMenus(context.Background(), &user.RoleSchema{ID: uint32(roleID)})
+	if err != nil {
+		response.RpcError(c, err)
+		return
+	}
+
+	resp := make([]response.Menu, len(reply.Menus))
+	_ = util.CopyWithTimeConverter(&resp, reply.Menus)
+
+	response.Success(c, resp)
+}
+
 func NewUserApi() *UserApi {
 	return &UserApi{
 		logger:  logger.NewZapLogger(),

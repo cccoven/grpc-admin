@@ -34,3 +34,5 @@ bin/
 .vscode/
 .idea/
 *.swp
+
+internal/log

@@ -26,6 +26,32 @@ func NewUserServer() *server {
 	}
 }
 
+// RoleMenus 获取角色菜单
+func (s *server) RoleMenus(ctx context.Context, in *user.RoleSchema) (*user.RoleMenusReply, error) {
+	menus, err := s.repo.GetMenusByRoleID(in.ID)
+	if err != nil {
+		return nil, errorx.StatusError(err)
+	}
+
+	listReply := &user.RoleMenusReply{Menus: []*user.RoleMenu{}}
+	_ = util.CopyWithTimeConverter(&listReply.Menus, menus)
+
+	return listReply, nil
+}
+
+// RoleAuthorities 获取角色权限
+func (s *server) RoleAuthorities(ctx context.Context, in *user.RoleSchema) (*user.RoleAuthoritiesReply, error) {
+	authorities, err := s.repo.GetRoutesByRoleID(in.ID)
+	if err != nil {
+		return nil, errorx.StatusError(err)
+	}
+	
+	listReply := &user.RoleAuthoritiesReply{Authorities: []*user.RoleAuthority{}} 
+	_ = util.CopyWithTimeConverter(&listReply.Authorities, authorities)
+	
+	return listReply, nil
+}
+
 // SetRoleMenus 角色分配菜单
 func (s *server) SetRoleMenus(ctx context.Context, in *user.SetRoleMenusRequest) (*user.UserProtoEmpty, error) {
 	role, err := s.repo.FindRole(model.Role{GormModel: pkg.GormModel{ID: uint(in.RoleID)}}, false)
@@ -35,6 +61,7 @@ func (s *server) SetRoleMenus(ctx context.Context, in *user.SetRoleMenusRequest)
 	if err := s.repo.SetRoleMenus(role, in.Menus); err != nil {
 		return nil, errorx.StatusError(err)
 	}
+	
 	return &user.UserProtoEmpty{}, nil
 }
 

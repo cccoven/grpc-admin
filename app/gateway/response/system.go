@@ -15,7 +15,7 @@ type Route struct {
 	Method    string     `json:"method"`
 	Desc      string     `json:"desc"`
 	GroupID   uint32     `json:"groupID"`
-	Group     RouteGroup `json:"group"`
+	Group     *RouteGroup `json:"group,omitempty"`
 }
 
 type Menu struct {

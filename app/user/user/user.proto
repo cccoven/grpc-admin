@@ -31,6 +31,10 @@ service User {
   rpc CheckRolesAuthority(CheckRolesAuthorityRequest) returns (CheckRolesAuthorityReply) {}
   // 角色列表
   rpc ListRole(ListRoleRequest) returns (ListRoleReply) {}
+  // 获取角色权限
+  rpc RoleAuthorities(RoleSchema) returns (RoleAuthoritiesReply) {}
+  // 获取角色菜单
+  rpc RoleMenus(RoleSchema) returns (RoleMenusReply) {}
 }
 
 message UserProtoEmpty {}
@@ -55,6 +59,33 @@ message RoleSchema {
   uint32 parentID = 6;
   int32 isDefault = 7;
   repeated RoleSchema children = 8;
+}
+
+message RoleMenu {
+  uint32 ID = 1;
+  int64 createdAt = 2;
+  int64 updatedAt = 3;
+  string path = 4;
+  string name = 5;
+  string component = 6;
+  int32 sort = 7;
+  uint32 parentID = 8;
+}
+message RoleMenusReply {
+  repeated RoleMenu menus = 2;
+}
+
+message RoleAuthority {
+  uint32 ID = 1;
+  int64 createdAt = 2;
+  int64 updatedAt = 3;
+  string path = 4;
+  string method = 5;
+  string desc = 6;
+  uint32 groupID = 7;
+}
+message RoleAuthoritiesReply {
+  repeated RoleAuthority authorities = 1;
 }
 
 message ListRoleRequest {

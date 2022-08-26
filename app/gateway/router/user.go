@@ -59,9 +59,10 @@ func RegisterUserRouterV1(version *gin.RouterGroup) {
 		adminGroup.DELETE("/role/:id", api.DelRole)
 		// 角色列表
 		adminGroup.GET("/role/list", api.ListRole)
-		// TODO 获取角色权限
-
-		// TODO 获取角色菜单
+		// 获取角色权限
+		adminGroup.GET("/role/:id/authorities", api.GetRoleAuthorities)
+		// 获取角色菜单
+		adminGroup.GET("/role/:id/menus", api.GetRoleMenus)
 	}
 }
 
