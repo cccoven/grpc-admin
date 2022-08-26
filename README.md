@@ -9,7 +9,7 @@
 
 - 服务注册发现：etcd
 - rpc 及服务负载均衡：grpc、protobuf
-- 数据操作及日志：gorm、go-redis、zap
+- 数据操作及日志：gorm、go-redis、zap、casbin
 - 网关 - RESTful API：gin
 - ......
 
