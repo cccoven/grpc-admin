@@ -12,6 +12,8 @@ func Do(db *gorm.DB) {
 		&model.UserSignInLog{},
 		&model.Role{},
 		&model.UserRole{},
+		&model.Menu{},
+		&model.Route{},
 	)
 	if err != nil {
 		log.Fatal("Failed to migrate: ", err)

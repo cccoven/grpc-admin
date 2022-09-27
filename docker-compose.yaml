@@ -1,0 +1,89 @@
+version: "3"
+
+networks:
+  grpc: # 创建一个名为 grpc 的网络
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.18.0.0/16" # 网段范围
+
+services:
+  # 环境 
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "grpc_admin" # 初始化启动时要创建的数据库的名称
+      MYSQL_ROOT_PASSWORD: "1234"
+    volumes:
+      - /home/mysql/data:/var/lib/mysql
+    restart: always
+    networks:
+      grpc:
+        ipv4_address: 172.18.0.2
+          
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command:
+      --requirepass "1234"
+    volumes:
+      - /home/redis/data:/data
+    restart: always
+    networks:
+      grpc:
+        ipv4_address: 172.18.0.3
+   
+  etcd:
+    image: bitnami/etcd
+    container_name: etcd
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    environment:
+      ALLOW_NONE_AUTHENTICATION: "yes"
+    restart: always
+    networks:
+      grpc:
+        ipv4_address: 172.18.0.4
+      
+  # 服务
+  gateway:
+    build:
+      context: /app/grpc-admin # 服务器上的部署目录
+      dockerfile: /app/grpc-admin/app/gateway/Dockerfile # 相当于 docker build 的 -f 参数
+    container_name: grpc-admin-gateway
+    image: "grpc-admin/gateway:1.0.0"
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - grpc
+    
+  user:
+    build: 
+      context: /app/grpc-admin 
+      dockerfile: /app/grpc-admin/app/user/Dockerfile 
+    container_name: grpc-admin-user
+    image: "grpc-admin/user:1.0.0"
+    ports:
+      - "8001:8001"
+    restart: always
+    networks:
+      - grpc
+  
+  system:
+    build:
+      context: /app/grpc-admin
+      dockerfile: /app/grpc-admin/app/system/Dockerfile
+    container_name: grpc-admin-system
+    image: "grpc-admin/system:1.0.0"
+    ports:
+      - "8003:8003"
+    restart: always
+    networks:
+      - grpc

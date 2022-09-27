@@ -17,7 +17,7 @@ func main() {
 	flag.Parse()
 	pkg.LoadConfig(*configFile, &conf.AppConf)
 
-	lis, err := net.Listen("tcp", conf.AppConf.Service.Host)
+	lis, err := net.Listen("tcp", ":"+conf.AppConf.Service.Port)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +31,7 @@ func main() {
 	// 注册到 Etcd
 	registerService()
 
-	log.Printf("Server [%s] listning at %s...\n", conf.AppConf.Service.Name, conf.AppConf.Service.Host)
+	log.Printf("Server [%s] listning at %s:%s...\n", conf.AppConf.Service.Name, conf.AppConf.Service.Host, conf.AppConf.Service.Port)
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatal(err)

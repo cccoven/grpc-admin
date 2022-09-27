@@ -53,7 +53,7 @@ func register() {
 
 	// 服务的 key 必须带上一个唯一性的 ID，否则多个服务注册时会造成相同的 key 覆盖，从而导致客户端永远只能发现一个服务
 	fullKey := fmt.Sprintf("%s/%s/%d", prefix, conf.AppConf.Service.Name, lease.ID)
-	err = em.AddEndpoint(ctx, fullKey, endpoints.Endpoint{Addr: conf.AppConf.Service.Host}, clientv3.WithLease(lease.ID))
+	err = em.AddEndpoint(ctx, fullKey, endpoints.Endpoint{Addr: conf.AppConf.Service.Host + ":" + conf.AppConf.Service.Port}, clientv3.WithLease(lease.ID))
 	if err != nil {
 		log.Fatal(err)
 	}

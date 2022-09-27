@@ -1,6 +1,7 @@
 Service:
   Name: ThirdPartyService
-  Host: 127.0.0.1:8002
+  Host: 0.0.0.0
+  Port: 8002
 Etcd:
   Hosts:
     - 127.0.0.1:2379

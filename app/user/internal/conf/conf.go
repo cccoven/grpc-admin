@@ -21,6 +21,7 @@ type Conf struct {
 	Service struct {
 		Name string
 		Host string
+		Port string
 	}
 
 	// Etcd 配置

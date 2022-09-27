@@ -7,7 +7,7 @@ Jwt:
   BufferTime: 86400
 Etcd:
   Hosts:
-    - 127.0.0.1:2379
+    - 0.0.0.0:2379
 Logger:
   Zap:
     OutputDir: app/gateway/log

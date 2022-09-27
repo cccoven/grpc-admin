@@ -1,6 +1,7 @@
 Service:
   Name: UserService
-  Host: 127.0.0.1:8001
+  Host: 0.0.0.0
+  Port: 8001
 Etcd:
   Hosts:
     - 127.0.0.1:2379
