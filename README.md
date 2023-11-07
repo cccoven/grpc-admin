@@ -1,10 +1,3 @@
-> 该项目仍处于开发阶段。。。
->
-> 项目目录结构参考了 [go-zero](https://github.com/zeromicro/go-zero) 与 [kratos](https://github.com/go-kratos/kratos)
-> 组织。
->
-> 部分代码参考了 [gin-vue-admin](https://github.com/flipped-aurora/gin-vue-admin) 的实现。
-
 ## 涉及技术
 
 - 服务注册发现：etcd
@@ -34,3 +27,11 @@ go run *.go -f ../../config/config.yaml
 - [x] 路由管理
 - [x] 菜单管理
 - [ ] ......
+
+## 参考
+
+[gin-vue-admin](https://github.com/flipped-aurora/gin-vue-admin)
+
+[go-zero](https://github.com/zeromicro/go-zero)
+
+[kratos](https://github.com/go-kratos/kratos)
